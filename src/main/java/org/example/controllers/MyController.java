@@ -1,10 +1,12 @@
 package org.example.controllers;
 
 import org.example.entity.Employee;
+import org.example.exeptionHandling.EmployeeIncorrectData;
+import org.example.exeptionHandling.NoSuchEmployeeException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.example.services.EmployeeService;
 
 import java.io.IOException;
@@ -25,6 +27,17 @@ public class MyController {
 
         return allEmployees;
     }
+
+    @GetMapping("employees/{id}")
+    public Employee getEmployeeById(@PathVariable int id) {
+        Employee employee = employeeService.getEmployee(id);
+        if (employee == null) {
+            throw new NoSuchEmployeeException("there is no Emploee with id:" + id + " in database");
+        }
+        return employee;
+    }
+
+
 
 }
 
